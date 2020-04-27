@@ -6,7 +6,7 @@ import java.io.*;
 public class TargetServer{
 
   private ServerSocket serverSocket;
-  private Socket clientSocket;
+  private Socket anonClient;
   private PrintStream ps;
   private BufferedReader br;
 
@@ -17,22 +17,19 @@ public class TargetServer{
       serverSocket = new ServerSocket(port);
 
       //conectar ao socket do cliente
-      clientSocket = serverSocket.accept();
+      anonClient = serverSocket.accept();
       System.out.println("Connection established");
 
       //enviar dados para o cliente
-      ps = new PrintStream(clientSocket.getOutputStream());
+      ps = new PrintStream(anonClient.getOutputStream());
 
       //ler dados vindos do cliente
-      br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-
-
+      br = new BufferedReader(new InputStreamReader(anonClient.getInputStream()));
 
       ps.close();
       br.close();
       serverSocket.close();
-      clientSocket.close();
+      anonClient.close();
 
 
   }
