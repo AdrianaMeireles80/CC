@@ -57,6 +57,15 @@ public void connectTarget(String address, int port) throws Exception{
       bufferServidor.close();
       anonCliente.close();
  }
+
+
+ public void main(String[] args) throws Exception{
+  connectOrigin(80);
+
+  connectTarget("10.3.3.1", 80);
+
+}
+
 }
 
 

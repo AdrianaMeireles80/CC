@@ -35,4 +35,9 @@ public class Origin{
 
 
     }
+
+    public void main(String[] args) throws Exception{
+      clientConnection("10.3.3.1", 80);
+  
+    }
 }

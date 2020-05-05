@@ -33,4 +33,9 @@ public class TargetServer{
 
 
   }
+
+  public void main(String[] args) throws Exception{
+    serverConnection(80);
+
+  }
 }
