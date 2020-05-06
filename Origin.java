@@ -1,3 +1,5 @@
+
+
 // cliente comunica com o AnonGW
 //AnonGW comunica com o servidor
 
@@ -6,38 +8,14 @@ import java.io.*;
 
 public class Origin{
 
-  private Socket clientSocket;
-  private BufferedReader br;
-  private DataOutputStream dos;
 
+  public static void main(String[] args) throws IOException{
+    Socket socket = new Socket("10.3.3.1", 80);
+    DataInputStream in = new DataInputStream(socket.getInputStream());
+    System.out.println(in.readUTF());
+    DataOutputStream out = new DataOutputStream((socket.getOutputStream()));
+    out.writeUTF("waiting for connection");
+    socket.close();
+  }
 
-
-    public void clientConnection (String address, int port) throws Exception
-    {
-      
-
-      //criar socket do cliente
-      clientSocket = new Socket(address, port);
-
-      //enviar info para o servidor
-      dos = new DataOutputStream(clientSocket.getOutputStream());
-
-      //ler info que vem do servidor
-      br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-
-
-
-      dos.close();
-      br.close();
-      clientSocket.close();
-
-
-
-    }
-
-    public void main(String[] args) throws Exception{
-      clientConnection("10.3.3.1", 80);
-  
-    }
 }

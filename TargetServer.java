@@ -5,37 +5,13 @@ import java.io.*;
 
 public class TargetServer{
 
-  private ServerSocket serverSocket;
-  private Socket anonClient;
-  private PrintStream ps;
-  private BufferedReader br;
-
-
-  public void serverConnection(int port) throws Exception{
-
-      //criar socket do Server
-      serverSocket = new ServerSocket(port);
-
-      //conectar ao socket do cliente
-      anonClient = serverSocket.accept();
-      System.out.println("Connection established");
-
-      //enviar dados para o cliente
-      ps = new PrintStream(anonClient.getOutputStream());
-
-      //ler dados vindos do cliente
-      br = new BufferedReader(new InputStreamReader(anonClient.getInputStream()));
-
-      ps.close();
-      br.close();
-      serverSocket.close();
-      anonClient.close();
-
-
-  }
-
-  public void main(String[] args) throws Exception{
-    serverConnection(80);
-
-  }
+ public static void main(String[] args) throws IOException{
+  ServerSocket servsocket = new ServerSocket(80);
+  Socket socket = servsocket.accept();
+  DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+  out.writeUTF("weleleleleele");
+  DataInputStream in = new DataInputStream(socket.getInputStream());
+  System.out.println(in.readUTF());
+  socket.close();
+ }
 }
