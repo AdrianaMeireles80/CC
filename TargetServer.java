@@ -35,7 +35,19 @@ public class TargetServer{
   }
 
   public void main(String[] args) throws Exception{
-    serverConnection(80);
 
+    TargetServer target = new TargetServer();
+           
+        while (true){
+          try{
+
+            target.serverConnection(80);
+
+          }catch(IOException e){
+
+            e.printStackTrace();
+
+          } 
+    }
   }
 }

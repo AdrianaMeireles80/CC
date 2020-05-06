@@ -36,8 +36,20 @@ public class Origin{
 
     }
 
-    public void main(String[] args) throws Exception{
-      clientConnection("10.3.3.1", 80);
-  
+    public static void main(String[] args) throws Exception{
+      Origin origin = new Origin();
+
+        while (true){
+          try{
+
+            origin.clientConnection("10.3.3.1", 80);
+
+          }catch(IOException e){
+
+            e.printStackTrace();
+
+          }
+              
+        }
     }
 }
