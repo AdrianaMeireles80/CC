@@ -7,8 +7,8 @@ import java.io.*;
 
 /*
 o Socket 'anonCliente' serve para comunicar com o TargetServer (quando o AnonGW faz de cliente)
-o Socket 'anonServidor' e o ServerSocket 'servAnon' serve para comunicar com o Origin (quando o AnonGW faz de servidor)
-
+o Socket 'anonServidor' e o ServerSocket 'servAnon' serve para comunicar com o Origin 
+(quando o AnonGW faz de servidor)
 */
 
 public class AnonGW{
@@ -59,13 +59,24 @@ public void connectTarget(String address, int port) throws Exception{
  }
 
 
- public void main(String[] args) throws Exception{
-  connectOrigin(80);
+ public static void main(String[] args) throws Exception{
 
-  connectTarget("10.3.3.1", 80);
+    AnonGW anonGW = new AnonGW();
 
-}
+    while (true){
+      try{
 
+        anonGW.connectOrigin(80);
+
+        anonGW.connectTarget("10.3.3.1", 80);
+
+      }catch(IOException e){
+
+        e.printStackTrace();
+
+      } 
+    } 
+  }
 }
 
 

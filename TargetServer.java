@@ -5,6 +5,7 @@ import java.io.*;
 
 public class TargetServer{
 
+
  public static void main(String[] args) throws IOException{
   ServerSocket servsocket = new ServerSocket(80);
   Socket socket = servsocket.accept();
@@ -14,4 +15,5 @@ public class TargetServer{
   System.out.println(in.readUTF());
   socket.close();
  }
+
 }
