@@ -1,84 +1,57 @@
-//tem duas conexões tcp
-//faz de servidor quando Origin comunica com ele
-//faz de cliente quando comunica com TargetServer
-
 import java.net.*;
 import java.io.*;
 
-/*
-o Socket 'anonCliente' serve para comunicar com o TargetServer (quando o AnonGW faz de cliente)
-o Socket 'anonServidor' e o ServerSocket 'servAnon' serve para comunicar com o Origin 
-(quando o AnonGW faz de servidor)
-*/
-
 public class AnonGW{
+	public static void main(String[] args) throws Exception{
+		System.out.println("Anon iniciado.");
 
-  private Socket anonCliente, anonServidor;
-  private BufferedReader bufferCliente, bufferServidor;
-  private DataOutputStream outCliente;
-  private ServerSocket servAnon; //servidor
-  private PrintStream printServidor;
+		System.out.println("Iniciar conexão com o servidor");
+		ServerSocket anon = new ServerSocket(80);
 
-  //conecta com a Origin
-  public void connectOrigin(int port) throws Exception{
+		while(true){
 
+			Socket socket = anon.accept();
 
-    servAnon = new ServerSocket(port);
+			Socket server = new Socket("10.3.3.1",80);
+		
+			System.out.println("Conexão estabelecida");
 
-    anonServidor = servAnon.accept();
-    System.out.println("Um cliente ligou se a um anon");
+			InputStream input = socket.getInputStream();
+                	OutputStream output = socket.getOutputStream();
 
-      //enviar dados para o cliente
-    printServidor = new PrintStream(anonServidor.getOutputStream());
+	                BufferedReader in = new BufferedReader(new InputStreamReader(input));
+        	        PrintStream out = new PrintStream(output);
 
-      //ler dados vindos do cliente
-    bufferCliente = new BufferedReader(new InputStreamReader(anonServidor.getInputStream()));
+			input = server.getInputStream();
+                	output = server.getOutputStream();
 
-      printServidor.close();
-      bufferCliente.close();
-      servAnon.close();
-      anonServidor.close();
+              		BufferedReader inp = new BufferedReader(new InputStreamReader(input));
+                	PrintStream outp = new PrintStream(output);
+				
+        
+        		while(true){
+				String mensagem = in.readLine();
+ 		
+				System.out.println("Mensagem recebida do cliente [" +
+                		socket.getInetAddress().getHostName()+"]: " + mensagem);
+
+                		outp.println(mensagem);
+		
+				if("FIM".equals(mensagem)){
+					break;
+         			}
+
+				mensagem = inp.readLine();
+				out.println(mensagem);
+			}
+			
+			System.out.println("Conexão encerrada.");
+			in.close();
+			out.close();
+			inp.close();
+			outp.close();
+			socket.close();
+			server.close();
+        	}
+        }
 }
-
-
-//conecta com o Target
-public void connectTarget(String address, int port) throws Exception{
-
-      //criar socket do cliente
-      anonCliente = new Socket(address, port);
-
-      //enviar info para o servidor
-      outCliente = new DataOutputStream(anonCliente.getOutputStream());
-
-      //ler info que vem do servidor
-      bufferServidor = new BufferedReader(new InputStreamReader(anonCliente.getInputStream()));
-
-      outCliente.close();
-      bufferServidor.close();
-      anonCliente.close();
- }
-
-
- public static void main(String[] args) throws Exception{
-
-    AnonGW anonGW = new AnonGW();
-
-    while (true){
-      try{
-
-        anonGW.connectOrigin(80);
-
-        anonGW.connectTarget("10.3.3.1", 80);
-
-      }catch(IOException e){
-
-        e.printStackTrace();
-
-      } 
-    } 
-  }
-}
-
-
-
-

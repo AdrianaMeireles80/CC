@@ -13,7 +13,7 @@ public class Origin{
 
 		System.out.println("Iniciar conexão com o servidor");
 
-		Socket socket = new Socket("10.3.3.1",80);
+		Socket socket = new Socket("10.1.1.3",80);
 
 		System.out.println("Conexão Estabelecida.");
 
@@ -30,12 +30,14 @@ public class Origin{
 
 			System.out.print("Escreva uma mensagem: ");
 			
-			String mensagem = scan.nextLine();				
+			String mensagem = scan.nextLine();
 
-			out.println(mensagem);
+                	out.println(mensagem);
+
 			if("FIM".equals(mensagem)){
 				break;
 			}
+
 			mensagem = in.readLine();
 			System.out.println(
 				"Mensagem recebida do servidor: " +
