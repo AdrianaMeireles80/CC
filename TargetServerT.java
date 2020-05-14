@@ -29,7 +29,7 @@ public class TargetServerT implements Runnable {
 		
 				if("FIM".equals(mensagem)){
 					break;
-         			}
+         		}
 
                 out.println(mensagem);
  		    }

@@ -12,13 +12,10 @@ public class TargetServer {
 		System.out.println("Aguardar Conexão de um cliente.");
 	
 		while(true){
-			Socket cliente = servidor.accept();
+			Socket anonpeer = servidor.accept();
 			System.out.println("Conexão estabelecida");
-			Thread c = new Thread(new TargetServerT(cliente));
+			Thread c = new Thread(new TargetServerT(anonpeer));
 			c.start();            
-        } 
-   
-
-		
+        }
 	}
 }

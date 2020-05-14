@@ -1,24 +1,36 @@
 import java.net.*;
 import java.io.*;
+import java.util.Random;
 
 public class AnonGWT implements Runnable{
 
-			private Socket socket ;
-			private Socket server = new Socket("10.3.3.1", 80); 
-			private BufferedReader inp;
-			private PrintStream outp;
-			private BufferedReader in;
-			private PrintStream out;
-	
+
+	  		private Socket socket ; //socket que vem do cliente
+			 
+			private DatagramSocket peer; //para enviar po peer
+			private String[] anonPeer = {"10.1.1.2","10.4.4.2","10.4.4.3"} ;
+			private BufferedReader inp; //receber do anonPeer
+			private PrintStream outp; //enviar po anonPeer
+			private BufferedReader in;// do q se le do socket do cliente
+			private PrintStream out;//para responder ao cliente
+			private byte buf[] = new byte[1024];
+
+
 		    public AnonGWT(Socket c) throws IOException{
 		    	this.socket = c;
 		    }
-				
-        
+
+		  
             public void run(){
             	try{
-            			
-				System.out.println("Conexão estabelecida");
+            	    	
+			    this.peer  = new DatagramSocket(6666);
+
+			    Random random = new Random();
+			    int num = random.nextInt(2);
+
+			    System.out.println("Numero do peer a qual vai ligar: " + anonPeer[num]);
+
 
 				InputStream input = socket.getInputStream();
             	OutputStream output = socket.getOutputStream();
@@ -26,28 +38,40 @@ public class AnonGWT implements Runnable{
 	        	this.in = new BufferedReader(new InputStreamReader(input));
         		this.out = new PrintStream(output);
 
-				input = server.getInputStream();
-            	output = server.getOutputStream();
+        		InetAddress addrPeer = InetAddress.getByName(anonPeer[num]); //para enviar para um dos 3 peers
 
-            	this.inp = new BufferedReader(new InputStreamReader(input));
-            	this.outp = new PrintStream(output);
+				//input = peer.getInputStream();
+            	//output = peer.getOutputStream();
 
+            	//this.inp = new BufferedReader(new InputStreamReader(input));
+            	//this.outp = new PrintStream(output);
 
 
             	while(true){
-					String mensagem = in.readLine();
+					String mensagem = in.readLine(); //ler o que vem do cliente
  		
 					System.out.println("Mensagem recebida do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem);
 
-                	outp.println(mensagem);
+					buf = mensagem.getBytes();
+
+					DatagramPacket packet = new DatagramPacket(buf, buf.length, addrPeer, 6666);
+                    
+                    peer.send(packet); // enviar o pacote po anonpeer
 		
 					if("FIM".equals(mensagem)){
 						break;
          			}
 
-					mensagem = inp.readLine();
-					out.println(mensagem);
+         			packet = new DatagramPacket(buf,buf.length);
+         			peer.receive(packet); //t receber pacote do anonpeer
+
+         			String received = new String(packet.getData(),0,packet.getLength());
+
+         			out.println(received); //enviar a resposta po cliente
+
+					
 				}
+
 			}catch(Exception e){
 				e.printStackTrace();
 			}finally{
@@ -55,10 +79,10 @@ public class AnonGWT implements Runnable{
 				System.out.println("Conexão encerrada.");
 				in.close();
 				out.close();
-				inp.close();
-				outp.close();
+				//inp.close();
+				//outp.close();
 				socket.close();
-				server.close();
+				peer.close();
 			   }
 			   catch(Exception e){
 			   	e.printStackTrace();
