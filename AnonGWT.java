@@ -23,7 +23,7 @@ public class AnonGWT implements Runnable{
             	try{
             	    	
 			    this.peer  = new DatagramSocket();
-				peer.connect(addrPeer, 6666);
+				
 
 			    Random random = new Random();
 			    int num = random.nextInt(2);
@@ -38,7 +38,7 @@ public class AnonGWT implements Runnable{
         		    this.out = new PrintStream(output);
 
         		    InetAddress addrPeer = InetAddress.getByName(anonPeer[num]); //para enviar para um dos 3 peers
-
+				peer.connect(addrPeer, 6666);
             	            while(true){
 					String mensagem = in.readLine(); //ler o que vem do cliente
  		
