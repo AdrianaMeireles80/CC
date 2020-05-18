@@ -3,7 +3,7 @@ import java.io.*;
 
 public class AnonPeerT extends Thread{
 
-	private BufferedReader in; //receber o que vem do server
+    private BufferedReader in; //receber o que vem do server
     private PrintStream out;  //escrever o que vai po server
     private Socket server ; //mandar po server
     private DatagramSocket anon; //tratar do que vem do anon
@@ -16,9 +16,9 @@ public class AnonPeerT extends Thread{
     		server = new Socket("10.3.3.1",80);
 
     		InputStream input = server.getInputStream();
-            OutputStream output = server.getOutputStream();
+                OutputStream output = server.getOutputStream();
 
-            this.anon = new DatagramSocket(6666);
+                this.anon = new DatagramSocket(6666);
 
 
 	        this.in = new BufferedReader(new InputStreamReader(input));
@@ -29,32 +29,28 @@ public class AnonPeerT extends Thread{
         		
         		DatagramPacket packet = new DatagramPacket(buf, buf.length);
          		anon.receive(packet); // extrair dados que vem do anon
-
-         		/*
+         		
          		InetAddress address = packet.getAddress();
          		int port = packet.getPort();
 
          		packet = new DatagramPacket(buf,buf.length,address,port);
-				*/
+			
          		String received = new String(packet.getData(), 0, packet.getLength());
 
          		out.println(received); //enviar a resposta po servidor
 
          		if("FIM".equals(received)){
-						break;
-         	    }
+				break;
+         	        }
         	    
 
-         	    received = in.readLine(); // ler o que vem do servidor
+         	        received = in.readLine(); // ler o que vem do servidor
 
-         	    buf = received.getBytes();
+         	        buf = received.getBytes();
 
-         	    InetAddress address = packet.getAddress();
-         		int port = packet.getPort();
-         	    
-				packet = new DatagramPacket(buf,buf.length,address,port);         	    
+		        packet = new DatagramPacket(buf,buf.length,address,port);         	    
 
-         	    anon.send(packet); //enviar a resposta po anon
+         	        anon.send(packet); //enviar a resposta po anon
 
         	}
 
