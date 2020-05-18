@@ -9,8 +9,6 @@ public class AnonGWT implements Runnable{
 			 
 			private DatagramSocket peer; //para enviar po peer
 			private String[] anonPeer = {"10.1.1.2","10.4.4.2","10.4.4.3"} ;
-			private BufferedReader inp; //receber do anonPeer
-			private PrintStream outp; //enviar po anonPeer
 			private BufferedReader in;// do q se le do socket do cliente
 			private PrintStream out;//para responder ao cliente
 			private byte buf[] = new byte[1024];
@@ -32,22 +30,15 @@ public class AnonGWT implements Runnable{
 			    System.out.println("Numero do peer a qual vai ligar: " + anonPeer[num]);
 
 
-				InputStream input = socket.getInputStream();
-            	OutputStream output = socket.getOutputStream();
+			    InputStream input = socket.getInputStream();
+            		    OutputStream output = socket.getOutputStream();
 
-	        	this.in = new BufferedReader(new InputStreamReader(input));
-        		this.out = new PrintStream(output);
+	        	    this.in = new BufferedReader(new InputStreamReader(input));
+        		    this.out = new PrintStream(output);
 
-        		InetAddress addrPeer = InetAddress.getByName(anonPeer[num]); //para enviar para um dos 3 peers
+        		    InetAddress addrPeer = InetAddress.getByName(anonPeer[num]); //para enviar para um dos 3 peers
 
-				//input = peer.getInputStream();
-            	//output = peer.getOutputStream();
-
-            	//this.inp = new BufferedReader(new InputStreamReader(input));
-            	//this.outp = new PrintStream(output);
-
-
-            	while(true){
+            	            while(true){
 					String mensagem = in.readLine(); //ler o que vem do cliente
  		
 					System.out.println("Mensagem recebida do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem);
@@ -56,11 +47,11 @@ public class AnonGWT implements Runnable{
 
 					DatagramPacket packet = new DatagramPacket(buf, buf.length, addrPeer, 6666);
                     
-                    peer.send(packet); // enviar o pacote po anonpeer
+                                        peer.send(packet); // enviar o pacote po anonpeer
 		
 					if("FIM".equals(mensagem)){
 						break;
-         			}
+         			        }
 
          			packet = new DatagramPacket(buf,buf.length);
          			peer.receive(packet); //t receber pacote do anonpeer
