@@ -22,7 +22,8 @@ public class AnonGWT implements Runnable{
             public void run(){
             	try{
             	    	
-			    this.peer  = new DatagramSocket(6666);
+			    this.peer  = new DatagramSocket();
+				peer.connect(addrPeer, 6666);
 
 			    Random random = new Random();
 			    int num = random.nextInt(2);
