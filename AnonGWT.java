@@ -38,7 +38,8 @@ public class AnonGWT implements Runnable{
         		    this.out = new PrintStream(output);
 
         		    InetAddress addrPeer = InetAddress.getByName(anonPeer[num]); //para enviar para um dos 3 peers
-				peer.connect(addrPeer, 6666);
+			    peer.connect(addrPeer, 6666);
+			
             	            while(true){
 					String mensagem = in.readLine(); //ler o que vem do cliente
  		
@@ -53,9 +54,9 @@ public class AnonGWT implements Runnable{
 					if("FIM".equals(mensagem)){
 						break;
          			        }
-
+				buf = new byte[1024];
          			packet = new DatagramPacket(buf,buf.length);
-         			peer.receive(packet); //t receber pacote do anonpeer
+         			peer.receive(packet); //receber pacote do anonpeer
 
          			String received = new String(packet.getData(),0,packet.getLength());
 
@@ -71,8 +72,6 @@ public class AnonGWT implements Runnable{
 				System.out.println("Conexão encerrada.");
 				in.close();
 				out.close();
-				//inp.close();
-				//outp.close();
 				socket.close();
 				peer.close();
 			   }
