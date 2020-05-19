@@ -33,7 +33,7 @@ public class AnonPeerT extends Thread{
          		InetAddress address = packet.getAddress();
          		int port = packet.getPort();
 
-         		packet = new DatagramPacket(buf,buf.length,address,port);
+         		//packet = new DatagramPacket(buf,buf.length,address,port);
 			
          		String received = new String(packet.getData(), 0, packet.getLength());
 
