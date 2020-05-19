@@ -1,6 +1,6 @@
 import java.net.*;
 import java.io.*;
-
+import java.util.*;
 public class AnonPeerT extends Thread{
 
     private BufferedReader in; //receber o que vem do server
@@ -36,7 +36,7 @@ public class AnonPeerT extends Thread{
          		//packet = new DatagramPacket(buf,buf.length,address,port);
 			
          		String received = new String(packet.getData(), 0, packet.getLength());
-
+			System.out.println("Mensagem recebida do cliente [" + server.getInetAddress().getHostName() + "]: " + received);
          		out.println(received); //enviar a resposta po servidor
 
          		if("FIM".equals(received)){
@@ -45,14 +45,17 @@ public class AnonPeerT extends Thread{
         	    
 
          	        received = in.readLine(); // ler o que vem do servidor
-			
-			buf = new byte[1024];
+			Map<Integer, StringBuilder> pacote = new HashMap<Integer, StringBuilder>();
+			pacote.put(received.key,received);
+			buf = new byte[4*1024+200];
          	        buf = received.getBytes();
+			
+			System.out.println("vindo do servidor" + buf.length);			
 
 		        packet = new DatagramPacket(buf,buf.length,address,port);         	    
-
+			System.out.println("Mensagem recebida do server [" + server.getInetAddress().getHostName() + "]: " + received);
          	        anon.send(packet); //enviar a resposta po anon
-			buf = new byte[1024];
+			buf = new byte[4*1024+200];
 
         	}
 
@@ -60,7 +63,7 @@ public class AnonPeerT extends Thread{
 				e.printStackTrace();
 			}finally{
 				try{
-					System.out.println("Conexão encerrada.");
+					System.out.println("ConexÃ£o encerrada.");
 					in.close();
 					out.close();
 					server.close();
@@ -69,14 +72,14 @@ public class AnonPeerT extends Thread{
 				catch(Exception e){
 			   		e.printStackTrace();
 			   }
-		    }
-    }
+		    	}
+    	}
 
 	public static void main(String[] args) {
 
 		while(true){
 		AnonPeerT anonpeer = new AnonPeerT();
-    	anonpeer.run();
-       }
-    }
+    		anonpeer.run();
+       		}
+   	}
 }
