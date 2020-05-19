@@ -2,6 +2,7 @@ import java.net.*;
 import java.io.*;
 import java.util.Random;
 
+
 public class AnonGWT implements Runnable{
 
 
@@ -27,6 +28,7 @@ public class AnonGWT implements Runnable{
 
 			    Random random = new Random();
 			    int num = random.nextInt(2);
+			    System.out.println("Numero random: " + num);
 
 			    System.out.println("Numero do peer a qual vai ligar: " + anonPeer[num]);
 
@@ -54,12 +56,12 @@ public class AnonGWT implements Runnable{
 					if("FIM".equals(mensagem)){
 						break;
          			        }
-				buf = new byte[1024];
+				buf = new byte[4*1024+200];
          			packet = new DatagramPacket(buf,buf.length);
          			peer.receive(packet); //receber pacote do anonpeer
 
          			String received = new String(packet.getData(),0,packet.getLength());
-
+				System.out.println("Mensagem recebida do peer [" + socket.getInetAddress().getHostName() + "]: " + received);
          			out.println(received); //enviar a resposta po cliente
 
 					
@@ -69,7 +71,7 @@ public class AnonGWT implements Runnable{
 				e.printStackTrace();
 			}finally{
 			    try{
-				System.out.println("Conexão encerrada.");
+				System.out.println("ConexÃ£o encerrada.");
 				in.close();
 				out.close();
 				socket.close();
