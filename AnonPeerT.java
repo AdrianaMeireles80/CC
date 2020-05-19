@@ -45,12 +45,14 @@ public class AnonPeerT extends Thread{
         	    
 
          	        received = in.readLine(); // ler o que vem do servidor
-
+			
+			buf = new byte[1024];
          	        buf = received.getBytes();
 
 		        packet = new DatagramPacket(buf,buf.length,address,port);         	    
 
          	        anon.send(packet); //enviar a resposta po anon
+			buf = new byte[1024];
 
         	}
 
