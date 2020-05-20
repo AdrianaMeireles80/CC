@@ -29,7 +29,9 @@ public class TargetServerT implements Runnable {
 				//String mens = out.realLine();
 				System.out.println("Mensagem recebida do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem);
 				System.out.println("Tamanho da mensagem do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem.length());
+
 				if("FIM".equals(mensagem)) break;
+
  				if (mensagem.equals("file")) {
 					System.out.println("ficheiro");
 					String filename = "file.txt";
@@ -39,7 +41,7 @@ public class TargetServerT implements Runnable {
     					try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
       					  	String line;
        						while ((line = br.readLine()) != null) {
-         					   file.append(line).append("\n");
+         					   file.append(line).append(" ");
         					}
     					}
  					
@@ -53,7 +55,7 @@ public class TargetServerT implements Runnable {
 				
          	
 
-	               		out.println(mensagem);
+	            out.println(mensagem);
 				System.out.println("Mensagem enviada do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem);
 				System.out.println("Tamanho da mensagem do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem.length()); 	}		
 }
@@ -62,7 +64,7 @@ public class TargetServerT implements Runnable {
 				e.printStackTrace();
 				}finally{
 					try{
-						System.out.println("ConexÃ£o encerrada.");
+						System.out.println("Conexão encerrada.");
 						in.close();
 						out.close();
 						socket.close();
