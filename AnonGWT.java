@@ -5,52 +5,49 @@ import java.util.*;
 
 public class AnonGWT implements Runnable{
 
+	private Socket socket ; //socket que vem do cliente	 
+	private DatagramSocket peer; //para enviar po peer
+	private String[] anonPeer = {"10.1.1.2","10.4.4.2","10.4.4.3"} ;
+	private BufferedReader in;// do q se le do socket do cliente
+	private PrintStream out;//para responder ao cliente
+	private byte buf[] = new byte[6*1024+200];
+	private Map<Integer, byte[]> pdublocks;
 
-	  		private Socket socket ; //socket que vem do cliente
-			 
-			private DatagramSocket peer; //para enviar po peer
-			private String[] anonPeer = {"10.1.1.2","10.4.4.2","10.4.4.3"} ;
-			private BufferedReader in;// do q se le do socket do cliente
-			private PrintStream out;//para responder ao cliente
-			private byte buf[] = new byte[4*1024+200];
-			private Map<Integer, byte[]> pdublocks;
+	public Map<Integer, byte[]> stringToBlocks(String s, int size){
+   		
+		byte buf[] = new byte[6*1024+200];
+   		buf = s.getBytes();
 
-			public Map<Integer, byte[]> stringToBlocks(String s, int size){
-   				 byte buf[] = new byte[4*1024+200];
-   				 buf = s.getBytes();
+    		Map<Integer, byte[]> aux = new HashMap<>();
 
-    			Map<Integer, byte[]> aux = new HashMap<>();
+    		byte value[];
+    		int pos = 0;
+    		int byteN, i, j, k;
 
-    			byte value[];
-    			int pos = 0;
-    			int byteN, i, j, k;
-
-    			for(i = 0; pos < buf.length; pos = (i+1)*size, i++){
-       			 	byteN = Math.min(size, buf.length-pos);
-        			value = new byte[byteN];
+    		for(i = 0; pos < buf.length; pos = (i+1)*size, i++){
+       		 	byteN = Math.min(size, buf.length-pos);
+        		value = new byte[byteN];
 
         		for(j = pos, k = 0; k < byteN; j++, k++)
             		value[k] = buf[j];
+        		aux.put(i, value);
+    		}
 
-        			aux.put(i, value);
-    			}
+   		return aux;
+	}
 
-   				 return aux;
-				}
-
-
-		    public AnonGWT(Socket c) throws IOException{
-		    	this.socket = c;
-		    }
+	public AnonGWT(Socket c) throws IOException{
+	 	this.socket = c;
+	}
 
 		  
-            public void run(){
-            	try{
+        public void run(){
+   	   	try{
             	    	
-			    this.peer  = new DatagramSocket();
+		    this.peer  = new DatagramSocket();
 				
 
-			    Random random = new Random();
+			Random random = new Random();
 			    int num = random.nextInt(2);
 			    System.out.println("Numero random: " + num);
 
@@ -67,7 +64,7 @@ public class AnonGWT implements Runnable{
 			    peer.connect(addrPeer, 6666);
 			
         while(true){
-        			buf = new byte[4*1024+200];
+        			buf = new byte[6*1024+200];
 					String mensagem = in.readLine(); //ler o que vem do cliente
  		
 					System.out.println("Mensagem recebida do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem);
@@ -82,29 +79,49 @@ public class AnonGWT implements Runnable{
 						break;
          			}
 
-         			buf = new byte[4*1024+200];
+         			buf = new byte[7*1024+200];
          			int tam=0;
+				int i =1;
+				
+			
+			
+			
+	
+				Map<Integer, byte[]> rec = new HashMap<>();
+
 	         		while(true){
 				    	
-				    	byte byteslidos[] = new byte[128];
+				    	byte byteslidos[] = new byte[7*1024+200];
 
          				packet = new DatagramPacket(byteslidos,byteslidos.length);
          				peer.receive(packet); //receber pacote do anonpeer
+					
+					PDU aux = new PDU(byteslidos);
+					
+					rec.put(aux.getNumSeq(),aux.getData());
+					String h = new String(aux.getData());
+					
+					int valor = aux.getNumSeq();
 
-         				if((tam+packet.getLength()>4*1024+200)) break;
+					System.out.println("numero" + valor);
+         				if((tam+packet.getLength()>7*1024+200)) break;
 
-         				System.arraycopy(packet.getData(),0,buf,tam,packet.getLength());
+         				System.arraycopy(aux.getData(),0,buf,tam,h.length());
+					System.out.println("Tamanho do bloco" + h.length() + "numero " + i); i++;
+					
+					
 
-         				if(packet.getLength() < 128) break;
-
-         				tam+=packet.getLength();
-         				System.out.println(new String(packet.getData(), 0, packet.getLength()));
-
+         				if(packet.getLength() < 500) break;
+					tam+=h.length();
+         				System.out.println("Bloco ;"+h + "tam" + tam);
+					
+					
 					}
-
+					
+					
 					String received = new String(buf,0,buf.length);
-				    System.out.println("Mensagem recebida do peer [" + "]: " + received);
-         			out.println(received); //enviar a resposta po cliente
+				   	System.out.println("Mensagem recebida do peer [" + "]: " + received);
+         				out.println(received); //enviar a resposta po cliente
 
 				}
 
@@ -112,7 +129,7 @@ public class AnonGWT implements Runnable{
 				e.printStackTrace();
 			}finally{
 			    try{
-				System.out.println("Conexão encerrada.");
+				System.out.println("ConexÃ£o encerrada.");
 				in.close();
 				out.close();
 				socket.close();
