@@ -3,13 +3,11 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 public class PDU implements Serializable {
-
 	private int numSeq; 
-    private byte[] data;
+        private byte[] data;
 
-    public PDU(){
-
-    }
+   	 public PDU(){
+   	 }
 	
 	public PDU (int numSeq, byte[] data){
 		this.numSeq = numSeq;
@@ -77,10 +75,9 @@ public class PDU implements Serializable {
             for(j = pos, k = 0; k < byteN; j++, k++)
                 value[k] = buf[j];
             
-            PDU pdu = new PDU(i, value);
+       	    PDU pdu = new PDU(i, value);
             aux.put(i, pdu);
-        }          
-
+        }  
         return aux;
     }
 }	
