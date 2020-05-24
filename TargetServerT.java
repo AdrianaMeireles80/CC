@@ -15,8 +15,7 @@ public class TargetServerT implements Runnable {
 	}
 
 	public void run() {
-        	try {    
-
+        	try { 
            		InputStream input = socket.getInputStream();
         		OutputStream output = socket.getOutputStream();
 	
@@ -24,17 +23,16 @@ public class TargetServerT implements Runnable {
         		this.out = new PrintStream(output);
   
 	    		while(true){
-         		
-					String mensagem = in.readLine();
+				String mensagem = in.readLine();
 				
-					System.out.println("Mensagem recebida do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem);
-					System.out.println("Tamanho da mensagem do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem.length());
+				System.out.println("Mensagem recebida do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem);
+				System.out.println("Tamanho da mensagem do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem.length());
 
-					if("FIM".equals(mensagem)) break;
+				if("FIM".equals(mensagem)) break;
 
- 					if (mensagem.equals("file")) {
-						System.out.println("ficheiro");
-						String filename = "file.txt";
+ 				if (mensagem.equals("file")) {
+					System.out.println("ficheiro");
+					String filename = "file.txt";
 					
     					StringBuilder file = new StringBuilder();
 
@@ -46,19 +44,17 @@ public class TargetServerT implements Runnable {
         					}
     					}
  					
-	  					Map<Integer, StringBuilder> pacote = new HashMap<Integer, StringBuilder>();
-						pacote.put(file.length(),file);
-						out.println(pacote);
-						System.out.println("Mensagem enviada do cliente [" + socket.getInetAddress().getHostName() + "]: " + file.toString());
-						System.out.println("Tamanho da mensagem do cliente [" + socket.getInetAddress().getHostName() + "]: " + file.length()); 
-					}else {        	
-
-	            	out.println(mensagem);
+	  				Map<Integer, StringBuilder> pacote = new HashMap<Integer, StringBuilder>();
+					pacote.put(file.length(),file);
+					out.println(pacote);
+					System.out.println("Mensagem enviada do cliente [" + socket.getInetAddress().getHostName() + "]: " + file.toString());
+					System.out.println("Tamanho da mensagem do cliente [" + socket.getInetAddress().getHostName() + "]: " + file.length()); 
+				}else { 
+					out.println(mensagem);
 					System.out.println("Mensagem enviada do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem);
 					System.out.println("Tamanho da mensagem do cliente [" + socket.getInetAddress().getHostName() + "]: " + mensagem.length()); 
-					}
+				}
                 }
-
  			}catch(Exception e){
 					e.printStackTrace();
 					}finally{
