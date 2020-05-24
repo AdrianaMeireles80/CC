@@ -56,28 +56,34 @@ public class PDU implements Serializable {
 		this.data = data;
 
 	}
-
-    public Map<Integer, PDU> stringToBlocks(String s, int size){
+	
+     /**
+     * Função que divide a mensagem passada como string em diversos blocos,
+     * de acordo com o tamanho size.
+     * @param s   String que vai ser dividida
+     * @param size   Tamanho de cada bloco
+     */
+    	public Map<Integer, PDU> stringToBlocks(String s, int size){
         
-        byte buf[] = new byte[5*1024+200];
-        buf = s.getBytes();
+        	byte buf[] = new byte[5*1024+200];
+        	buf = s.getBytes();
 
-        Map<Integer, PDU> aux = new HashMap<>();
+        	Map<Integer, PDU> aux = new HashMap<>();
 
-        byte value[];
-        int pos = 0;
-        int byteN, i, j, k;
+        	byte value[];
+        	int pos = 0;
+        	int byteN, i, j, k;
 
-        for(i = 0; pos < buf.length; pos = (i+1)*size, i++){
-            byteN = Math.min(size, buf.length-pos);
-            value = new byte[byteN];
+        	for(i = 0; pos < buf.length; pos = (i+1)*size, i++){
+            		byteN = Math.min(size, buf.length-pos);
+            		value = new byte[byteN];
 
-            for(j = pos, k = 0; k < byteN; j++, k++)
-                value[k] = buf[j];
+            		for(j = pos, k = 0; k < byteN; j++, k++)
+                		value[k] = buf[j];
             
-       	    PDU pdu = new PDU(i, value);
-            aux.put(i, pdu);
-        }  
+       	    		PDU pdu = new PDU(i, value);
+            		aux.put(i, pdu);
+        	}  
         return aux;
     }
 }	
