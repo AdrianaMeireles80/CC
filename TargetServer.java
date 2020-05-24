@@ -16,6 +16,6 @@ public class TargetServer {
 			System.out.println("Conexão estabelecida");
 			Thread c = new Thread(new TargetServerT(anonpeer));
 			c.start();            
-        }
+        	}
 	}
 }
