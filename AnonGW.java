@@ -7,16 +7,13 @@ public class AnonGW{
 		System.out.println("Anon iniciado.");
 
 		System.out.println("Iniciar conexão com o servidor");
-		try(ServerSocket anon = new ServerSocket(80);){
-		
+		ServerSocket anon = new ServerSocket(80);
 
-			while(true){
-				Socket cliente = anon.accept();
-				System.out.println("Conexão estabelecida");
-				Thread c = new Thread(new AnonGWT(cliente));
-				c.start();            
-		}
-	} 
+		while(true){
+			Socket cliente = anon.accept();
+			System.out.println("Conexão estabelecida");
+			Thread c = new Thread(new AnonGWT(cliente));
+			c.start();            
+        } 
    }
 }
-
